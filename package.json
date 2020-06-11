@@ -1,0 +1,20 @@
+{
+  "name": "skilltests",
+  "version": "1.0.0",
+  "description": "test your dbd skill tests",
+  "main": "./src/index.js",
+  "scripts": {
+    "start": "webpack-dev-server --config ./webpack.config.js"
+  },
+  "author": "Kaio Fernandes and William Noronha",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^3.5.3",
+    "file-loader": "^6.0.0",
+    "html-loader": "^1.1.0",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
