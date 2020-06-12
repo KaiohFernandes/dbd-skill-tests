@@ -1,61 +1,86 @@
 import './style.css';
 import template from './index.html';
 
-const SAFE_ZONE = 25;
+import { checkSkillTest } from '../../components/SkillCheck';
+
+const PIN_SPEED = 20;
 
 function SkillTest() { 
-  // const random = Math.floor(Math.random() * 361); 
-  let random = 300;
 
-  const rotatePressPosition = () => {
+  const getRandom = () => {
+    let position = Math.floor(Math.random() * 361) + 1;
+    position = position < 90 ? 90 : position;
+    position = position > 325 ? 325 : position;
+
+    return position;
+  }
+
+  const restart = () => {
+    const skillCheck = document.querySelector('.skillCheck-skillTest');
+    skillCheck.style.opacity = 0;
+
+    const pressPosition = document.querySelector('.skillCheck .skillCheck-pressPosition');
+    pressPosition.style.opacity = 0;
+
+    let timeRandom = Math.floor(Math.random() * 10) + 1;
+    timeRandom = timeRandom < 3 ? 3 : timeRandom;
+      
+    setTimeout(() => {
+      rotateSkillCheck(getRandom());
+    }, timeRandom * 1000);
+  }
+
+  const rotatePressPosition = (random) => {
     const image = document.querySelector('.skillCheck .skillCheck-pressPosition');
     image.style.opacity = 1;
 
-    let i = 0;
-    const interval = setInterval(rotate, 4   )
-
+    let currentPosition = 0;
+    const interval = setInterval(rotate, PIN_SPEED);
+ 
     function rotate() {
-      image.style.transform = `rotate(${i}deg)`;
+      image.style.transform = `rotate(${currentPosition}deg)`;
 
-      i < 360 ? i++ : i = 0;
-
-      if(i > random + SAFE_ZONE) {
-        console.log('passou a skill');
-        clearInterval(interval);
-      } 
-
-      window.onkeyup = e => {                   
-        if(e.keyCode == 32) {
-
-          if(i < random - SAFE_ZONE) {
-            console.log('apertou antes');
-            clearInterval(interval);  
-          }
-
-          if(i > random - SAFE_ZONE) {
-            console.log('Skill Acertado'); 
-            clearInterval(interval);
-          }
-        }
-      }
+      checkSkillTest({ interval, currentPosition, checkPosition: random}, restart);
+      currentPosition < 360 ? currentPosition = currentPosition + 4 : currentPosition = 0;     
     }
   }
 
-  const rotateSkillCheck = () => {
-    setTimeout(() => {      
+  const rotateSkillCheck = (random = getRandom()) => {
+    setTimeout(() => {
       const image = document.querySelector('.skillCheck-skillTest');
-    
+
       if(image) {
         image.style.transform = `rotate(${random}deg)`;
         image.style.opacity = 1;
 
-        rotatePressPosition();
+        rotatePressPosition(random);
       }
-    }, 10);
+    }, 0);
   }
 
-  rotateSkillCheck();
+  const backgroundEffect = () => {
+    setTimeout(() => {
+      let background = Math.floor(Math.random() * 3) + 1;
 
+      const page = document.querySelector('.skillTest');
+      page.classList.add(`background${background}`);
+
+      const button = document.getElementsByName('handleBackground');      
+      button[0].addEventListener('click', () => {  
+        page.classList.remove(page.classList[1]);      
+        page.classList.add('withoutImage');
+      });
+
+      button[1].addEventListener('click', () => {
+        background = Math.floor(Math.random() * 3) + 1
+        page.classList.add(`background${background}`);
+        page.classList.remove('withoutImage');
+      });
+    }, 0)
+  }
+
+  backgroundEffect();
+  rotateSkillCheck();
   return template
 }
 
